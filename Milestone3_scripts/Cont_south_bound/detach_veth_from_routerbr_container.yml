@@ -1,0 +1,9 @@
+- hosts: localhost
+  tasks:  
+        - name: Detach veth from Route Bridge inside container
+          command: "{{item}}"
+          with_items:
+                  - sudo docker exec "{{container_name}}" ip link set "{{veth}}" down
+                  - sudo docker exec "{{container_name}}" brctl delif "{{route_br}}" "{{veth}}"
+
+

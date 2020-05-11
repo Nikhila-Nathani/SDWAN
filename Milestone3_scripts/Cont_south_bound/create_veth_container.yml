@@ -1,0 +1,9 @@
+---
+#the inputs taken are --extra-vars "veth1=veth_name  veth2="
+- hosts: localhost
+  remote_user: root
+  tasks:
+    - name: Create Veth pair
+      command: sudo ip link add "{{ veth1 }}" type veth peer name "{{ veth2 }}"
+      become: yes  
+...

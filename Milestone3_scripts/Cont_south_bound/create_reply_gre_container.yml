@@ -1,0 +1,9 @@
+- hosts: "{{host}}"
+  tasks:
+        - name: Create Reply GRE tunnel inside container
+          command: "{{item}}"
+          with_items:
+                - sudo docker exec "{{container_name}}" ip tunnel add "{{replygre}}" mode gre local 140.0.0.1 remote 120.0.0.1
+                - sudo docker exec "{{container_name}}" ip link set dev "{{replygre}}" up
+                - sudo docker exec "{{container_name}}" ip route add "{{dest-subnet}}" dev "{{replygre}}" 
+                - sudo docker exec "{{container_name}}" ip route add 120.0.0.0/24 via 140.0.0.2

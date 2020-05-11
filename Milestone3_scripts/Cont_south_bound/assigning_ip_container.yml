@@ -1,0 +1,10 @@
+---
+#the inputs taken are --extra-vars "veth=veth_name  ip_addr=ip c_name=ns_name"
+- hosts: localhost
+  tasks:
+	
+    - name: Assigning ip to container
+      command: sudo docker exec {{ c_name }} ip addr add {{ ip_addr }} dev {{ veth }}
+      become: yes
+
+...

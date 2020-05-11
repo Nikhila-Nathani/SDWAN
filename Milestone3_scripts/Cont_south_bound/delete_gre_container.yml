@@ -1,0 +1,9 @@
+- hosts: "{{host}}"
+  tasks:
+        - name: Delete GRE tunnel inside container
+          command: "{{item}}"
+          with_items:
+                - sudo docker exec "{{container_name}}" ip link set dev "{{gre}}" down
+                - sudo docker exec "{{container_name}}" ip tunnel del "{{gre}}" mode gre local 120.0.0.1 remote 140.0.0.1
+                - sudo docker exec "{{container_name}}" ip route del "{{dest-subnet}}" dev "{{gre}}" 
+                - sudo docker exec "{{container_name}}" ip route del 140.0.0.0/24 via 120.0.0.2

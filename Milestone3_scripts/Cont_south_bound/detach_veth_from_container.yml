@@ -1,0 +1,11 @@
+- hosts: localhost
+  tasks: 
+        - name: Get PID
+          command: sudo docker inspect --format  \"\{\{.State.Pid\}\}\" "{{container_name}}"
+          register: pid 
+        
+        - name: Detach veth from container
+          command: "{{item}}"
+          with_items:
+                  - sudo docker exec "{{container_name}}" ip link set dev "{{veth}}" down
+

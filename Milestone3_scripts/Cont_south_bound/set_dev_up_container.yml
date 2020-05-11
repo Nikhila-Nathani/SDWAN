@@ -1,0 +1,5 @@
+- hosts: "{{host}}"
+  tasks:
+      - name: Set device up
+        command: sudo ip link set dev "{{device}}" up
+

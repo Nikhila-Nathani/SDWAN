@@ -1,0 +1,15 @@
+---
+# the inputs taken are --extra-vars "veth=veth_name  c_name=container_name"
+- hosts: localhost
+  tasks: 
+        - name: Get PID
+          command: sudo docker inspect --format  \"\{\{.State.Pid\}\}\" "{{ c_name }}"
+          register: pid 
+        
+        - name: Attach veth to container
+          command: "{{ item }}"
+          with_items:
+          - sudo ip link set netns "{{ pid.stdout }}" dev "{{ veth }}"
+          - sudo docker exec "{{ c_name }}" ip link set dev "{{ veth }}" up 
+...                  
+

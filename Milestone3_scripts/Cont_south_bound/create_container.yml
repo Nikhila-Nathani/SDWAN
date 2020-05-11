@@ -1,0 +1,9 @@
+---
+#the inputs taken are --extra-vars "c_name="
+- hosts: localhost
+  tasks: 
+    - name: Create container
+      command: "{{ item }}"
+      with_items:
+      - sudo docker run --name "{{ c_name }}" --privileged -td all_in_one
+...

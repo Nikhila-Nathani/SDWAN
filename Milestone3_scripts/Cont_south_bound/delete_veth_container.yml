@@ -1,0 +1,5 @@
+- hosts: "{{host}}"
+  tasks:
+          - name: Delete Veth pair
+            command: sudo ip link del "{{veth-1}}" type veth peer name "{{veth-2}}"
+        

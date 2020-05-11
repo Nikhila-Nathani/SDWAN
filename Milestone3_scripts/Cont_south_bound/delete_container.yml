@@ -1,0 +1,7 @@
+- hosts: localhost
+  tasks: 
+        - name: Delete container
+          command: "{{item}}"
+          with_items:
+                  - sudo docker rm "{{container_name}}" -f
+

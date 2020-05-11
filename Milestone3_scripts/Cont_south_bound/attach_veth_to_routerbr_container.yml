@@ -1,0 +1,25 @@
+---
+#the inputs taken are --extra-vars "c_name routebr veth2 gw start_ip end_ip"
+- hosts: localhost
+  tasks:  
+
+      - name: Creating bridge in CE container
+        command: "{{ item }}"
+        with_items:
+                - sudo docker exec "{{ c_name }}" brctl addbr "{{ routebr }}"
+                - sudo docker exec "{{ c_name }}" ip link set "{{ routebr }}" up
+                
+      - name: Attaching Veth pair to Route Bridge inside container
+        command: "{{ item }}"
+        with_items:
+                - sudo docker exec "{{ c_name }}" brctl addif "{{ routebr }}" "{{ veth2 }}"
+                - sudo docker exec "{{ c_name }}" ip link set "{{ veth2 }}" up
+                
+      - name: Configuring the subnet onto the L3 bridge
+        command: "{{ item }}"
+        with_items:
+                - sudo docker exec "{{ c_name }}" ip addr add "{{ gw }}" dev "{{ routebr }}" 
+                - sudo docker exec "{{ c_name }}" dnsmasq --interface= "{{ routebr }}" --except-interface=lo --bind-interfaces --dhcp-range= "{{ start_ip }}","{{ end_ip }}",12h --dhcp-option=3, "{{ gw }}"        
+        become: True
+
+...

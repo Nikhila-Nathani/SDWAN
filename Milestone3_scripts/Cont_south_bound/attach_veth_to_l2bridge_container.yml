@@ -1,0 +1,10 @@
+---
+#the inputs taken are --extra-vars "veth=veth_name  bridge=br"
+- hosts: localhost
+  tasks:
+       - name: Attach veth to bridge 
+         command: "{{ item }}"
+         with_items: 
+            - sudo brctl addif "{{ bridge }}" "{{ veth }}"
+            - sudo ip link set "{{ veth }}" up
+...

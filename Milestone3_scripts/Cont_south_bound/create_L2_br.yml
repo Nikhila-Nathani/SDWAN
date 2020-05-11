@@ -1,0 +1,17 @@
+---
+#  the inputs taken are --extra-vars "bridge=br_name" 
+- hosts: localhost
+  remote_user: root
+  vars:
+    networkPath: "/etc/libvirt/qemu/networks/"
+    mode: "0666"
+  tasks:
+  - name: Creating L2 bridge
+    command: sudo brctl addbr {{ bridge }}
+    become: yes
+    
+  - name: Set bridges up
+    command: sudo ip link set dev {{ bridge }} up
+    become: yes
+    
+...	

@@ -1,0 +1,5 @@
+- hosts: "{{host}}"
+  tasks:
+      - name: Bring device down
+        command: sudo ip link set dev "{{device}}" down
+

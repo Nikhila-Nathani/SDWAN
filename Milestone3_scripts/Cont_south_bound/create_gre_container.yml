@@ -1,0 +1,11 @@
+---
+# the inputs taken are --extra-vars "gre=gre-tunnel src_ip=ips dest_ip=ipd c_name=container_name"
+- hosts: localhost
+  tasks:
+        - name: Create GRE tunnel inside container
+          command: "{{ item }}"
+          with_items:
+                - sudo docker exec "{{ c_name }}" ip tunnel add "{{ gre }}" mode gre local "{{ src_ip }}" remote "{{ dest_ip }}"
+                - sudo docker exec "{{ c_name }}" ip link set dev "{{ gre }}" up
+
+...

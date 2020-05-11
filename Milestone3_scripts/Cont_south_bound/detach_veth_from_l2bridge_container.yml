@@ -1,0 +1,7 @@
+- hosts: "{{host}}"
+  tasks:
+       - name: Detach veth from bridge
+         command: "{{item}}"
+         with_items: 
+            - sudo ip link set "{{veth}}" down
+            - sudo brctl delif "{{forward-bridge}}" "{{veth}}"

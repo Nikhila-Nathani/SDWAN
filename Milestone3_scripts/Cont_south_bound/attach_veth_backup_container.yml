@@ -1,0 +1,19 @@
+---
+#the inputs taken are --extra-vars "veth1= veth2= bridge= c_name="
+- hosts: localhost
+  tasks:
+
+      - name: Attach veth to bridge
+        command: sudo brctl addif "{{ bridge }}" "{{ veth1 }}"
+        become: yes
+      - name: Get PID
+        command: sudo docker inspect --format  \"\{\{.State.Pid\}\}\" "{{ c_name }}"
+        register: pid
+      - name: Attach veth to container
+        command: "{{ item }}"
+        with_items:
+          - sudo ip link set netns "{{ pid.stdout }}" dev "{{ veth2 }}"
+        become: yes
+
+...
+
